@@ -57,8 +57,8 @@ function mostrarLivros(lista) {
         const cartao = document.createElement('div');
         cartao.classList.add('livro-item');
         
-        const nomeBase = livro.arquivo.replace("Livros/", "").replace(".pdf", "");
-        const capaUrl = `Capas/${nomeBase}.jpg`;
+        const nomeArquivoSomente = livro.arquivo.replace("Livros/", "").replace(".pdf", "");
+        const capaUrl = `Capas/${encodeURIComponent(nomeArquivoSomente)}.jpg`;
 
         cartao.innerHTML = `
             <img src="${capaUrl}" alt="Capa">
