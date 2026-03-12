@@ -132,12 +132,28 @@ const livros = [
     { titulo: "Web Design Responsivo", autor: "Casa do Código", arquivo: "Livros/Web Design Responsivo - Paginas - Autor (Casa do Codigo).pdf" }
 ];
 
-// O RESTANTE DO SEU CÓDIGO (Função de busca, renderização, etc.) CONTINUA ABAIXO...
 const estante = document.getElementById('estante');
 const campoBusca = document.getElementById('campoBusca');
 
+function criarCapaReserva() {
+    const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 450" width="300" height="450">
+            <rect width="300" height="450" fill="#2d2d2d"/>
+            <text x="150" y="200" text-anchor="middle" font-family="Arial" font-size="20" fill="#888">Capa</text>
+            <text x="150" y="235" text-anchor="middle" font-family="Arial" font-size="14" fill="#666">Indisponível</text>
+        </svg>
+    `;
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
 function mostrarLivros(lista) {
     estante.innerHTML = ""; 
+    
+    if (lista.length === 0) {
+        estante.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 20px;">Nenhum livro encontrado com esse nome.</p>';
+        return;
+    }
+
     lista.forEach(livro => {
         const cartao = document.createElement('div');
         cartao.classList.add('livro-item');
@@ -146,18 +162,19 @@ function mostrarLivros(lista) {
         const capaUrl = `Capas/${encodeURIComponent(nomeArquivoSomente)}.jpg`;
 
         cartao.innerHTML = `
-            <img src="${capaUrl}" alt="Capa">
+            <img src="${capaUrl}" alt="Capa" onerror="this.src='${criarCapaReserva()}'">
             <h3>${livro.titulo}</h3>
             <p style="font-size: 12px; color: #aaa;">${livro.autor}</p>
         `;
 
         cartao.onclick = () => window.open(livro.arquivo, '_blank');
+        
         estante.appendChild(cartao);
     });
 }
 
 campoBusca.addEventListener('input', () => {
-    const termo = campoBusca.value.toLowerCase();
+    const termo = campoBusca.value.toLowerCase().trim();
     const filtrados = livros.filter(l => 
         l.titulo.toLowerCase().includes(termo) || 
         l.autor.toLowerCase().includes(termo)
@@ -166,4 +183,5 @@ campoBusca.addEventListener('input', () => {
 });
 
 mostrarLivros(livros);
-//Sapo9841 🐸
+
+// Sapo9841 🐸
